@@ -34,7 +34,7 @@ final class Agent: NSObject, UNUserNotificationCenterDelegate {
         Task { await send(files, to: endpoint, cleanup: cleanup) }
     }
 
-    private func send(_ files: [SharedFile], to endpoint: Endpoint, cleanup: Bool) async {
+    func send(_ files: [SharedFile], to endpoint: Endpoint, cleanup: Bool) async {
         activeSends += 1
         defer { activeSends -= 1 }
 

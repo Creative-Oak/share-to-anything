@@ -14,6 +14,7 @@
 		3009698A4E8EA1EBE6F7D147 /* ShareToAnythingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8238938970AFDBE54857B7B /* ShareToAnythingApp.swift */; };
 		3D1384F16057763C9712D6CA /* SendKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = 277CD3EAAB4C7F8833283789 /* SendKitUI */; };
 		42E89BC966144695469D91AC /* ShareToAnythingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AFA7E05D475AD958670581 /* ShareToAnythingApp.swift */; };
+		4BE446170DAD46D15DD734CE /* SendPanelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B838F6495260A63B55F68B85 /* SendPanelController.swift */; };
 		611204A9C76BC6B56757CD37 /* SendKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1217ED5FED6092542A56EEF4 /* SendKit */; };
 		6B21BF52EEFB7BEAB4E10B71 /* Share-iOS.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 75A5C6333202006476CAC852 /* Share-iOS.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		76E4356CFB1715E48D7515DF /* SendKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = DC80E9CCE540C491824E8E29 /* SendKitUI */; };
@@ -98,6 +99,7 @@
 		9D3791952225F6B7EFD1A40B /* FinderExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FinderExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0AFA7E05D475AD958670581 /* ShareToAnythingApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareToAnythingApp.swift; sourceTree = "<group>"; };
 		B8238938970AFDBE54857B7B /* ShareToAnythingApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareToAnythingApp.swift; sourceTree = "<group>"; };
+		B838F6495260A63B55F68B85 /* SendPanelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendPanelController.swift; sourceTree = "<group>"; };
 		BA05861CD258146DA38EDC36 /* Share.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Share.entitlements; sourceTree = "<group>"; };
 		D7EDCE2782DF025B457C5ABA /* FinderMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinderMenu.swift; sourceTree = "<group>"; };
 		E146F42A9BF70816151B8E94 /* Share.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Share.entitlements; sourceTree = "<group>"; };
@@ -172,6 +174,7 @@
 				325A45108463C985F63C5D52 /* Agent.swift */,
 				1B5349F2A1569D2F13397F00 /* Info.plist */,
 				92B3159F542A7AF0CE85D126 /* MenuBarContent.swift */,
+				B838F6495260A63B55F68B85 /* SendPanelController.swift */,
 				3454B0F9700FAA3052A52629 /* SettingsWindowController.swift */,
 				601169F2BA5A77B87C948DC5 /* ShareToAnything.entitlements */,
 				A0AFA7E05D475AD958670581 /* ShareToAnythingApp.swift */,
@@ -435,6 +438,7 @@
 			files = (
 				8E663BE4B272AC5C5BEA81F9 /* Agent.swift in Sources */,
 				801B1E1990B43EF784F33D6F /* MenuBarContent.swift in Sources */,
+				4BE446170DAD46D15DD734CE /* SendPanelController.swift in Sources */,
 				EFD603D858DA782E102D10C6 /* SettingsWindowController.swift in Sources */,
 				42E89BC966144695469D91AC /* ShareToAnythingApp.swift in Sources */,
 			);

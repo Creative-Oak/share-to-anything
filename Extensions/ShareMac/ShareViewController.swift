@@ -47,10 +47,10 @@ final class ShareViewController: NSViewController {
         render(status: files.isEmpty ? .failed("Nothing shareable was found.") : .idle)
     }
 
-    /// Copies data-only items (e.g. images from Photos) into the shared Outbox.
+    /// Copies data-only items (e.g. images from Photos, attachments from Mail) into the shared Outbox.
     private static func copyFileRepresentation(of provider: NSItemProvider, into folder: URL) async throws -> URL {
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
-        let type = provider.registeredTypeIdentifiers.first ?? UTType.data.identifier
+        let type = provider.registeredTypeIdentifiers.first { UTType($0)?.conforms(to: .data) ?? false } ?? UTType.data.identifier
         return try await withCheckedThrowingContinuation { continuation in
             _ = provider.loadFileRepresentation(forTypeIdentifier: type) { url, error in
                 guard let url else {
