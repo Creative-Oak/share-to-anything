@@ -29,14 +29,14 @@
 		<key>NSExtensionAttributes</key>
 		<dict>
 			<key>NSExtensionActivationRule</key>
-			<dict>
-				<key>NSExtensionActivationSupportsFileWithMaxCount</key>
-				<integer>20</integer>
-				<key>NSExtensionActivationSupportsImageWithMaxCount</key>
-				<integer>20</integer>
-				<key>NSExtensionActivationSupportsMovieWithMaxCount</key>
-				<integer>20</integer>
-			</dict>
+			<string>SUBQUERY(extensionItems, $item, SUBQUERY($item.attachments, $attachment,
+  SUBQUERY($attachment.registeredTypeIdentifiers, $type,
+    $type UTI-CONFORMS-TO "public.file-url"
+    OR ($type UTI-CONFORMS-TO "public.data"
+      AND NOT $type UTI-CONFORMS-TO "public.text"
+      AND NOT $type UTI-CONFORMS-TO "public.url")
+  ).@count &gt;= 1
+).@count BETWEEN {1, 20}).@count &gt;= 1</string>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.share-services</string>

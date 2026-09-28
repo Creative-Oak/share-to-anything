@@ -20,6 +20,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     let store = EndpointStore(syncsWithICloud: true)
     lazy var agent = Agent(store: store)
     lazy var settings = SettingsWindowController(store: store)
+    lazy var sendPanel = SendPanelController(store: store, agent: agent) { [unowned self] in settings.show() }
     private var launchedWithURL = false
 
     func applicationWillFinishLaunching(_ notification: Notification) {
@@ -34,7 +35,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func application(_ application: NSApplication, open urls: [URL]) {
         launchedWithURL = true
-        for url in urls {
+        // Documents opened with the app (Mail's "Open in", Finder's "Open With") get the send panel.
+        let files = urls.filter(\.isFileURL)
+        if !files.isEmpty { sendPanel.show(files) }
+        for url in urls where !url.isFileURL {
             if url.host == "settings" { settings.show() } else { agent.handle(url) }
         }
     }

@@ -42,10 +42,17 @@ x-share-extension: &shareExtension
   NSExtensionPointIdentifier: com.apple.share-services
   NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareViewController
   NSExtensionAttributes:
-    NSExtensionActivationRule:
-      NSExtensionActivationSupportsFileWithMaxCount: 20
-      NSExtensionActivationSupportsImageWithMaxCount: 20
-      NSExtensionActivationSupportsMovieWithMaxCount: 20
+    # Files, plus data-only items such as Mail attachments and Photos images (which arrive
+    # without a file URL). Plain text and links are left out: there's nothing to send.
+    NSExtensionActivationRule: >-
+      SUBQUERY(extensionItems, $item, SUBQUERY($item.attachments, $attachment,
+        SUBQUERY($attachment.registeredTypeIdentifiers, $type,
+          $type UTI-CONFORMS-TO "public.file-url"
+          OR ($type UTI-CONFORMS-TO "public.data"
+            AND NOT $type UTI-CONFORMS-TO "public.text"
+            AND NOT $type UTI-CONFORMS-TO "public.url")
+        ).@count >= 1
+      ).@count BETWEEN {1, 20}).@count >= 1
 
 targets:
   # MARK: macOS
@@ -72,6 +79,25 @@ targets:
       properties:
         <<: [*sharedInfo, *urlTypes]
         LSUIElement: true
+        # Lists the app under "Open in ▸" for Mail attachments and Finder's "Open With"
+        # (Mail's attachment share menu only offers Apple's own services), without ever
+        # becoming the default app for a file type. Claiming public.data instead counts as a
+        # wildcard, and wildcard apps are left out of those menus.
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: Document
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: Alternate
+            LSItemContentTypes:
+              - public.content
+              - public.composite-content
+              - com.adobe.pdf
+              - public.image
+              - public.audiovisual-content
+              - public.text
+              - public.archive
+              - com.apple.mail.email
+              - org.openxmlformats.openxml
+              - org.oasis-open.opendocument
         LSApplicationCategoryType: public.app-category.productivity
         NSHumanReadableCopyright: ""
     entitlements:
