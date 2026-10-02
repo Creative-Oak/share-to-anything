@@ -17,6 +17,7 @@
 		611204A9C76BC6B56757CD37 /* SendKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1217ED5FED6092542A56EEF4 /* SendKit */; };
 		6B21BF52EEFB7BEAB4E10B71 /* Share-iOS.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 75A5C6333202006476CAC852 /* Share-iOS.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		76E4356CFB1715E48D7515DF /* SendKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = DC80E9CCE540C491824E8E29 /* SendKitUI */; };
+		7F1D741B41849307E58052D1 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 571C4AE9A54151B3898655D9 /* PrivacyInfo.xcprivacy */; };
 		801B1E1990B43EF784F33D6F /* MenuBarContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B3159F542A7AF0CE85D126 /* MenuBarContent.swift */; };
 		812472961FB724F635337B90 /* SendKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3B02C6714519F1008E62246D /* SendKit */; };
 		8CC0ADDF582487F32FD7A3B8 /* FinderMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EDCE2782DF025B457C5ABA /* FinderMenu.swift */; };
@@ -24,6 +25,7 @@
 		9C6609AC5ABA365727762647 /* SendKit in Frameworks */ = {isa = PBXBuildFile; productRef = 01BC63AE7484680E2AA67593 /* SendKit */; };
 		9E76532B5FE6CFB925551134 /* SendKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8EE7EC749436B51734CED2E7 /* SendKit */; };
 		A3B371E5ED6E7B53B6645075 /* Share-macOS.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7E5F79F2FCAB82311A1E4932 /* Share-macOS.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A9BD3669BBD76195AD21D61B /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 92A020053AF5E994ADD3D715 /* PrivacyInfo.xcprivacy */; };
 		D60AEA7C46371F7F06B27F5D /* SendKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = 2DBC0555599AE1368D6D64A9 /* SendKitUI */; };
 		E33B30370443360B34FD6517 /* SendKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = F62D27355FCCA8C33E55A7CE /* SendKitUI */; };
 		EFD603D858DA782E102D10C6 /* SettingsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3454B0F9700FAA3052A52629 /* SettingsWindowController.swift */; };
@@ -87,6 +89,7 @@
 		3454B0F9700FAA3052A52629 /* SettingsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowController.swift; sourceTree = "<group>"; };
 		49F4C27666043E46B1A3E22C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5614B8DF5322C134A87846A3 /* ShareToAnything-iOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "ShareToAnything-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		571C4AE9A54151B3898655D9 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		601169F2BA5A77B87C948DC5 /* ShareToAnything.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareToAnything.entitlements; sourceTree = "<group>"; };
 		6C213C339FFEED9116F8BDED /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		73FF40F971334BB4CBB1E474 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -94,6 +97,7 @@
 		7E5F79F2FCAB82311A1E4932 /* Share-macOS.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Share-macOS.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		891DC6B547621CA61EAA78B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8A4D5FB918862ED501CE876E /* ShareToAnything.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareToAnything.entitlements; sourceTree = "<group>"; };
+		92A020053AF5E994ADD3D715 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		92B3159F542A7AF0CE85D126 /* MenuBarContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarContent.swift; sourceTree = "<group>"; };
 		9D3791952225F6B7EFD1A40B /* FinderExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FinderExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0AFA7E05D475AD958670581 /* ShareToAnythingApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareToAnythingApp.swift; sourceTree = "<group>"; };
@@ -183,6 +187,7 @@
 			isa = PBXGroup;
 			children = (
 				E67F95BFE2D014975C70A492 /* Info.plist */,
+				92A020053AF5E994ADD3D715 /* PrivacyInfo.xcprivacy */,
 				8A4D5FB918862ED501CE876E /* ShareToAnything.entitlements */,
 				B8238938970AFDBE54857B7B /* ShareToAnythingApp.swift */,
 			);
@@ -230,6 +235,7 @@
 			isa = PBXGroup;
 			children = (
 				73FF40F971334BB4CBB1E474 /* Info.plist */,
+				571C4AE9A54151B3898655D9 /* PrivacyInfo.xcprivacy */,
 				BA05861CD258146DA38EDC36 /* Share.entitlements */,
 				0048548A6681D80335C95F76 /* ShareViewController.swift */,
 			);
@@ -264,6 +270,7 @@
 			buildConfigurationList = C5A1CE35A8939BF276B48FF3 /* Build configuration list for PBXNativeTarget "ShareToAnything-iOS" */;
 			buildPhases = (
 				9DFFD8869FC8A1F984F3DD1A /* Sources */,
+				A3C3656F00227D9BF04B88EB /* Resources */,
 				DA3DF50FEDCCA39B234C148A /* Frameworks */,
 				F3C1771D5DE11B905DFAC159 /* Embed Foundation Extensions */,
 			);
@@ -328,6 +335,7 @@
 			buildConfigurationList = 196341ED221149342456C914 /* Build configuration list for PBXNativeTarget "Share-iOS" */;
 			buildPhases = (
 				C9BA049BED531CE3D9EC66A2 /* Sources */,
+				86CFBE156270348761E6DE81 /* Resources */,
 				C1418CABF5F7CC7EF0C4770A /* Frameworks */,
 			);
 			buildRules = (
@@ -419,6 +427,25 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		86CFBE156270348761E6DE81 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F1D741B41849307E58052D1 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A3C3656F00227D9BF04B88EB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9BD3669BBD76195AD21D61B /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		2106C663DC5CF039F12E982D /* Sources */ = {

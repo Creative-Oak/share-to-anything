@@ -156,6 +156,8 @@ targets:
       path: App/iOS/Info.plist
       properties:
         <<: [*sharedInfo, *urlTypes]
+        # Only HTTPS/TLS and SMTP STARTTLS through Apple's APIs, which is exempt.
+        ITSAppUsesNonExemptEncryption: false
         UILaunchScreen: {}
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: true
