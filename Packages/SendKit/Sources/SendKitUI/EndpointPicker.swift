@@ -69,7 +69,7 @@ public struct EndpointPicker: View {
             .overlay {
                 if endpoints.isEmpty {
                     ContentUnavailableView("No endpoints", systemImage: "paperplane",
-                                           description: Text("Open Share to Anything to add one."))
+                                           description: Text("No endpoint accepts these files. Open Share to Anything to add or edit one."))
                 }
             }
         case .sending(let message):

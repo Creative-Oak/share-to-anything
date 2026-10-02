@@ -33,8 +33,38 @@ public struct Sender: Sendable {
         self.session = session
     }
 
-    public func send(_ files: [SharedFile], to endpoint: Endpoint) async throws -> SendOutcome {
-        guard !files.isEmpty else { throw SendError("No files to send.") }
+    public func send(_ originals: [SharedFile], to endpoint: Endpoint) async throws -> SendOutcome {
+        guard !originals.isEmpty else { throw SendError("No files to send.") }
+        if let rejected = originals.first(where: { !endpoint.accepts($0.url) }) {
+            throw SendError("\(endpoint.name) doesn't accept .\(rejected.ext) files (\(rejected.filename)).")
+        }
+
+        var preparation = endpoint.prepare
+        if case .dinero = endpoint.kind {
+            // Dinero rejects anything over 6 MB, so always shrink images to fit.
+            let dineroLimit = Double(DineroUploader.maxSize) / 1_048_576 - 0.2
+            if preparation.maxSizeMB == 0 || preparation.maxSizeMB > dineroLimit { preparation.maxSizeMB = dineroLimit }
+        }
+        let preparer = FilePreparer(preparation: preparation, endpointName: endpoint.name)
+        let files = try preparer.prepare(originals)
+
+        let outcome: SendOutcome
+        do {
+            outcome = try await deliver(files, originals: originals, to: endpoint)
+        } catch {
+            preparer.cleanUp()
+            throw error
+        }
+        // A draft still needs the prepared attachments; the system clears the temporary folder later.
+        guard case .sent(let message) = outcome else { return outcome }
+        preparer.cleanUp()
+        if let problem = endpoint.afterSend.apply(to: originals) {
+            return .sent("\(message) — but \(problem)")
+        }
+        return outcome
+    }
+
+    private func deliver(_ files: [SharedFile], originals: [SharedFile], to endpoint: Endpoint) async throws -> SendOutcome {
         switch endpoint.kind {
         case .http(let config):
             for file in files {
@@ -47,6 +77,10 @@ public struct Sender: Sendable {
             for file in files { try uploader.validate(file) }
             for file in files { try await uploader.upload(file) }
             return .sent("Uploaded \(Self.describe(files)) to Dinero")
+
+        case .folder(let config):
+            try config.deliver(files, originals: originals, endpointName: endpoint.name)
+            return .sent("\(config.move ? "Moved" : "Copied") \(Self.describe(files)) to \(config.folderURL?.lastPathComponent ?? "folder")")
 
         case .email(let config):
             let template = Template(files: files, endpointName: endpoint.name)

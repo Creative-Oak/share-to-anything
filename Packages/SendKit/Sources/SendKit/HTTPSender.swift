@@ -14,12 +14,15 @@ struct HTTPSender {
 
     func makeRequest(for file: SharedFile, now: Date = Date()) throws -> URLRequest {
         let contents = try file.data()
-        let template = Template(file: file, endpointName: endpoint.name, now: now,
-                                extra: config.bodyMode == .json ? ["base64": contents.base64EncodedString()] : [:])
+        let secret = secrets.get(endpoint.secretKey) ?? ""
+        var extra = [Template.secretPlaceholder: secret]
+        if config.bodyMode == .json { extra["base64"] = contents.base64EncodedString() }
+        let template = Template(file: file, endpointName: endpoint.name, now: now, extra: extra)
 
-        let urlString = template.expand(config.url).trimmingCharacters(in: .whitespaces)
+        let urlString = template.expandURL(config.url.trimmingCharacters(in: .whitespacesAndNewlines))
         guard let url = URL(string: urlString), let scheme = url.scheme, ["http", "https"].contains(scheme) else {
-            throw SendError("\(endpoint.name): invalid URL “\(urlString)”.")
+            // Show the template, not the expansion, so a secret in the URL isn't leaked into notifications.
+            throw SendError("\(endpoint.name): invalid URL “\(config.url)”.")
         }
         var request = URLRequest(url: url)
         request.httpMethod = config.method.rawValue
@@ -40,6 +43,11 @@ struct HTTPSender {
         case .json:
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.httpBody = Data(template.expand(config.jsonTemplate).utf8)
+        }
+
+        if !config.username.isEmpty {
+            let credentials = Data("\(config.username):\(secret)".utf8).base64EncodedString()
+            request.setValue("Basic \(credentials)", forHTTPHeaderField: "Authorization")
         }
 
         // User headers go last so they can override Content-Type.

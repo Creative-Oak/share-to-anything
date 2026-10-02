@@ -18,7 +18,7 @@ final class ShareViewController: NSViewController {
 
     private func render(status: EndpointPicker.Status) {
         let picker = EndpointPicker(
-            endpoints: EndpointStore.load(),
+            endpoints: EndpointStore.load().filter { $0.isOffered(for: files) },
             fileSummary: files.count == 1 ? files[0].lastPathComponent : "\(files.count) files",
             status: status,
             onSelect: { [weak self] in self?.handOff(to: $0) },
@@ -51,13 +51,14 @@ final class ShareViewController: NSViewController {
     private static func copyFileRepresentation(of provider: NSItemProvider, into folder: URL) async throws -> URL {
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         let type = provider.registeredTypeIdentifiers.first ?? UTType.data.identifier
+        let suggestedName = provider.suggestedName
         return try await withCheckedThrowingContinuation { continuation in
             _ = provider.loadFileRepresentation(forTypeIdentifier: type) { url, error in
                 guard let url else {
                     continuation.resume(throwing: error ?? SendError("Couldn't read the shared item."))
                     return
                 }
-                let name = provider.suggestedName.map { name in
+                let name = suggestedName.map { name in
                     url.pathExtension.isEmpty || name.hasSuffix(".\(url.pathExtension)") ? name : "\(name).\(url.pathExtension)"
                 } ?? url.lastPathComponent
                 let destination = folder.appending(path: name)

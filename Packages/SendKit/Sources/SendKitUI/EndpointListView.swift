@@ -9,6 +9,7 @@ public struct EndpointListView: View {
 
     @Environment(EndpointStore.self) private var store
     @State private var selection: Item?
+    @State private var isAdding = false
 
     public init() {}
 
@@ -20,6 +21,7 @@ public struct EndpointListView: View {
                         EndpointRow(endpoint: endpoint)
                             .tag(Item.endpoint(endpoint.id))
                             .contextMenu {
+                                Button("Duplicate", systemImage: "plus.square.on.square") { add(endpoint.duplicate()) }
                                 Button("Delete", systemImage: "trash", role: .destructive) { delete([endpoint.id]) }
                             }
                     }
@@ -37,13 +39,7 @@ public struct EndpointListView: View {
             #endif
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Menu {
-                        Button("Dinero", systemImage: "doc.text.magnifyingglass") { add(.newDinero()) }
-                        Button("Email", systemImage: "envelope") { add(.newEmail()) }
-                        Button("HTTP", systemImage: "network") { add(.newHTTP()) }
-                    } label: {
-                        Label("Add Endpoint", systemImage: "plus")
-                    }
+                    Button("Add Endpoint", systemImage: "plus") { isAdding = true }
                 }
             }
         } detail: {
@@ -58,6 +54,9 @@ public struct EndpointListView: View {
                 placeholder
             }
         }
+        .sheet(isPresented: $isAdding) {
+            PresetGallery { add($0) }
+        }
     }
 
     private var placeholder: some View {
@@ -65,17 +64,12 @@ public struct EndpointListView: View {
             Label(store.endpoints.isEmpty ? "No Endpoints" : "Select an Endpoint", systemImage: "paperplane")
         } description: {
             Text(store.endpoints.isEmpty
-                 ? "Add a Dinero, email or HTTP endpoint, then send files to it from Finder or the share sheet."
+                 ? "Pick a template such as Dinero, a folder, email or a webhook, then send files to it from Finder or the share sheet."
                  : "Choose an endpoint in the sidebar to edit it.")
         } actions: {
             if store.endpoints.isEmpty {
-                Menu("Add Endpoint") {
-                    Button("Dinero", systemImage: "doc.text.magnifyingglass") { add(.newDinero()) }
-                    Button("Email", systemImage: "envelope") { add(.newEmail()) }
-                    Button("HTTP", systemImage: "network") { add(.newHTTP()) }
-                }
-                .fixedSize()
-                .buttonStyle(.glassProminent)
+                Button("Add Endpoint") { isAdding = true }
+                    .buttonStyle(.glassProminent)
             }
         }
     }
