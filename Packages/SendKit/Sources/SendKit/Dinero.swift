@@ -163,7 +163,6 @@ actor TokenCache {
 
 struct DineroUploader {
     static let maxSize = 6 * 1024 * 1024
-    static let allowedExtensions: Set<String> = ["pdf", "png", "jpg", "jpeg", "gif", "heic", "tif", "tiff", "bmp"]
 
     var endpointID: UUID
     var config: DineroConfig
@@ -171,7 +170,7 @@ struct DineroUploader {
     var session: URLSession
 
     func validate(_ file: SharedFile) throws {
-        guard Self.allowedExtensions.contains(file.ext.lowercased()) else {
+        guard Endpoint.dineroExtensions.contains(file.ext.lowercased()) else {
             throw SendError("Dinero only accepts PDFs and images — \(file.filename) is a .\(file.ext) file.")
         }
         guard file.size <= Self.maxSize else {

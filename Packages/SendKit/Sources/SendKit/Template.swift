@@ -7,6 +7,8 @@ public struct Template {
     public static let placeholders = [
         "filename", "basename", "ext", "mime", "size", "date", "time", "datetime", "count", "endpoint",
     ]
+    /// Only for HTTP endpoints: the endpoint's secret from the Keychain.
+    public static let secretPlaceholder = "secret"
 
     public var values: [String: String]
 
@@ -34,6 +36,15 @@ public struct Template {
         ]
         values.merge(extra) { _, new in new }
         self.values = values
+    }
+
+    /// Expands a URL template, percent-encoding each value so file names can't break the URL.
+    public func expandURL(_ template: String) -> String {
+        var allowed = CharacterSet.alphanumerics
+        allowed.insert(charactersIn: "-._~:")
+        var encoded = self
+        encoded.values = values.mapValues { $0.addingPercentEncoding(withAllowedCharacters: allowed) ?? $0 }
+        return encoded.expand(template)
     }
 
     public func expand(_ template: String) -> String {

@@ -12,13 +12,17 @@ final class FinderMenu: FIFinderSync {
     override func menu(for menuKind: FIMenuKind) -> NSMenu? {
         guard menuKind == .contextualMenuForItems else { return nil }
         let endpoints = EndpointStore.load()
+        let selection = FIFinderSyncController.default().selectedItemURLs() ?? []
         let submenu = NSMenu(title: "Send to")
 
         if endpoints.isEmpty {
             submenu.addItem(withTitle: "Add endpoints…", action: #selector(openApp(_:)), keyEquivalent: "")
+        } else if !endpoints.contains(where: { $0.isOffered(for: selection) }) {
+            submenu.addItem(withTitle: "No endpoint accepts this file type", action: nil, keyEquivalent: "")
+            submenu.addItem(withTitle: "Edit endpoints…", action: #selector(openApp(_:)), keyEquivalent: "")
         } else {
             // Finder copies the menu, so `representedObject` is lost; the tag indexes into the endpoint list.
-            for (index, endpoint) in endpoints.enumerated() {
+            for (index, endpoint) in endpoints.enumerated() where endpoint.isOffered(for: selection) {
                 let item = NSMenuItem(title: endpoint.name, action: #selector(send(_:)), keyEquivalent: "")
                 item.tag = index
                 item.image = NSImage(systemSymbolName: endpoint.symbol, accessibilityDescription: nil)

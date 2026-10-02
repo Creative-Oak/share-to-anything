@@ -49,3 +49,12 @@ and kept in a short history. HTTP non-2xx responses include the first 300 chars 
 ## Testing
 
 `swift test` in `Packages/SendKit`: template expansion, MIME and multipart encoding, SMTP reply parsing, endpoint coding round-trips.
+
+## Added in 1.1: templates and workflow
+
+- **Presets** (`Presets.swift`) are plain `Endpoint` values offered in the Add Endpoint gallery. Most are configurations of the HTTP and email senders, so adding a service rarely needs new sending code.
+- **Import and export**: an endpoint is exported as JSON. On import it gets fresh identifiers, so it never shares Keychain items with the original. Secrets are not part of the model.
+- **`{secret}`**: one Keychain value per HTTP endpoint, usable in the URL, headers and fields. With a Basic auth user it's sent as the password. URL placeholders are percent-encoded.
+- **Send pipeline** (`Sender.send`): file-type check → `FilePreparer` (convert, shrink, rename copies in a temporary folder) → deliver → `AfterSend` (tag or move the originals, macOS only). A failed follow-up never turns a successful send into an error.
+- **Folder endpoints** copy or move files locally and are offered on macOS only.
+- **Compatibility**: fields added after 1.0 decode with defaults. The endpoint list skips entries it can't decode, so a kind added by a newer version on another device doesn't break older ones.

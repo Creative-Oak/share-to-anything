@@ -104,7 +104,7 @@ struct LabeledSecureField: View {
         SecureField(label, text: $text)
         #else
         LabeledContent(label) {
-            SecureField(label, text: $text, prompt: Text("Required"))
+            SecureField(label, text: $text, prompt: Text("Not set"))
                 .multilineTextAlignment(.trailing)
         }
         #endif

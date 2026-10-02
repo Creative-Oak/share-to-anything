@@ -5,6 +5,7 @@ import SwiftUI
 struct EndpointEditor: View {
     @Environment(EndpointStore.self) private var store
     @State private var draft: Endpoint
+    @State private var isExporting = false
 
     init(endpoint: Endpoint) {
         _draft = State(initialValue: endpoint)
@@ -12,6 +13,13 @@ struct EndpointEditor: View {
 
     var body: some View {
         Form {
+            if !draft.hint.isEmpty {
+                Section {
+                    Label(draft.hint, systemImage: "lightbulb")
+                        .foregroundStyle(.secondary)
+                }
+            }
+
             Section {
                 Field("Name", text: $draft.name)
                 SymbolPicker(selection: $draft.symbol)
@@ -21,12 +29,24 @@ struct EndpointEditor: View {
 
             switch draft.kind {
             case .http:
-                HTTPEditor(config: httpConfig, endpointID: draft.id)
+                HTTPEditor(config: httpConfig, endpointID: draft.id, secretKey: draft.secretKey)
             case .email:
                 EmailEditor(config: emailConfig, endpointID: draft.id)
             case .dinero:
                 DineroEndpointEditor(config: dineroConfig, endpointID: draft.id)
+            case .folder:
+                #if os(macOS)
+                FolderEditor(config: folderConfig)
+                #else
+                Section { Text("Folder endpoints only work on Mac.").foregroundStyle(.secondary) }
+                #endif
             }
+
+            FilesSection(endpoint: $draft)
+            #if os(macOS)
+            if !isMovingFolder { AfterSendSection(afterSend: $draft.afterSend) }
+            #endif
+            TestSendSection(endpoint: draft)
 
             Section {
                 Text(Template.placeholders.map { "{\($0)}" }.joined(separator: "  "))
@@ -44,6 +64,14 @@ struct EndpointEditor: View {
         #if os(macOS)
         .navigationSubtitle(draft.kindLabel)
         #endif
+        .toolbar {
+            ToolbarItem {
+                Button("Export…", systemImage: "square.and.arrow.up") { isExporting = true }
+                    .help("Save this endpoint as a file to share. Passwords and tokens are not included.")
+            }
+        }
+        .fileExporter(isPresented: $isExporting, document: EndpointDocument(draft), contentType: .json,
+                      defaultFilename: "\(draft.name) endpoint") { _ in }
         .task(id: draft) {
             try? await Task.sleep(for: .milliseconds(500))
             guard !Task.isCancelled, draft != store.endpoint(id: draft.id) else { return }
@@ -64,6 +92,16 @@ struct EndpointEditor: View {
                 set: { draft.kind = .email($0) })
     }
 
+    private var folderConfig: Binding<FolderConfig> {
+        Binding(get: { if case .folder(let config) = draft.kind { config } else { FolderConfig() } },
+                set: { draft.kind = .folder($0) })
+    }
+
+    /// Moving already relocates the original, so tagging/archiving it afterwards makes no sense.
+    private var isMovingFolder: Bool {
+        if case .folder(let config) = draft.kind { config.move } else { false }
+    }
+
     private var dineroConfig: Binding<DineroConfig> {
         Binding(get: { if case .dinero(let config) = draft.kind { config } else { DineroConfig() } },
                 set: { draft.kind = .dinero($0) })
@@ -75,6 +113,7 @@ struct EndpointEditor: View {
 struct HTTPEditor: View {
     @Binding var config: HTTPConfig
     var endpointID: UUID
+    var secretKey: String
 
     var body: some View {
         Section("Request") {
@@ -93,6 +132,15 @@ struct HTTPEditor: View {
             case .json:
                 Field("JSON template", text: $config.jsonTemplate, content: .code, multiline: true)
             }
+        }
+
+        Section {
+            SecretField("Secret", key: secretKey)
+            Field("Basic auth user", text: $config.username, prompt: "Off", content: .code)
+        } header: {
+            Text("Authentication")
+        } footer: {
+            Text("The secret is stored in the Keychain. Use it anywhere as {secret}, for example in a header “Authorization: Bearer {secret}”. With a Basic auth user, it's sent as that user's password.")
         }
 
         if config.bodyMode == .multipart {

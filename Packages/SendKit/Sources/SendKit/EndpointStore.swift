@@ -4,6 +4,23 @@ import Observation
 struct EndpointList: Codable {
     var endpoints: [Endpoint]
     var modified: Date
+
+    init(endpoints: [Endpoint], modified: Date) {
+        self.endpoints = endpoints
+        self.modified = modified
+    }
+
+    /// Skips endpoints this version can't read (e.g. a kind added by a newer version on another device).
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        modified = try container.decode(Date.self, forKey: .modified)
+        endpoints = try container.decode([Lossy].self, forKey: .endpoints).compactMap(\.endpoint)
+    }
+
+    private struct Lossy: Decodable {
+        var endpoint: Endpoint?
+        init(from decoder: Decoder) throws { endpoint = try? Endpoint(from: decoder) }
+    }
 }
 
 /// The endpoint list, persisted in the shared container and (in the main app) synced through iCloud KVS.

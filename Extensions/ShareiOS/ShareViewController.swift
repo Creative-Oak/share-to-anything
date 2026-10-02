@@ -19,7 +19,7 @@ final class ShareViewController: UIViewController, MFMailComposeViewControllerDe
 
     private func render(status: EndpointPicker.Status) {
         let picker = EndpointPicker(
-            endpoints: EndpointStore.load(),
+            endpoints: EndpointStore.load().filter { $0.isOffered(for: files.map(\.url)) },
             fileSummary: files.count == 1 ? files[0].filename : "\(files.count) files",
             status: status,
             onSelect: { [weak self] endpoint in Task { await self?.send(to: endpoint) } },
@@ -51,13 +51,14 @@ final class ShareViewController: UIViewController, MFMailComposeViewControllerDe
     private func copy(_ provider: NSItemProvider) async throws -> URL {
         let type = provider.registeredTypeIdentifiers.first { UTType($0)?.conforms(to: .data) ?? false } ?? UTType.data.identifier
         let folder = workFolder
+        let suggestedName = provider.suggestedName
         return try await withCheckedThrowingContinuation { continuation in
             _ = provider.loadFileRepresentation(forTypeIdentifier: type) { url, error in
                 guard let url else {
                     continuation.resume(throwing: error ?? SendError("Couldn't read the shared item."))
                     return
                 }
-                let name = provider.suggestedName.map { name in
+                let name = suggestedName.map { name in
                     url.pathExtension.isEmpty || name.hasSuffix(".\(url.pathExtension)") ? name : "\(name).\(url.pathExtension)"
                 } ?? url.lastPathComponent
                 let destination = folder.appending(path: name)

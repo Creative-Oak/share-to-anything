@@ -12,8 +12,8 @@ settings:
     DEVELOPMENT_TEAM: 493257NQK3
     CODE_SIGN_STYLE: Automatic
     SWIFT_VERSION: "5.0"
-    MARKETING_VERSION: "1.0"
-    CURRENT_PROJECT_VERSION: "1"
+    MARKETING_VERSION: "1.1"
+    CURRENT_PROJECT_VERSION: "2"
     APP_BUNDLE_ID: dk.creativeoak.share-to-anything
     APP_GROUP_ID: group.dk.creativeoak.share-to-anything
     # macOS authorizes team-prefixed groups by signature alone; "group." IDs need an explicit
@@ -156,6 +156,8 @@ targets:
       path: App/iOS/Info.plist
       properties:
         <<: [*sharedInfo, *urlTypes]
+        # Only HTTPS/TLS and SMTP STARTTLS through Apple's APIs, which is exempt.
+        ITSAppUsesNonExemptEncryption: false
         UILaunchScreen: {}
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: true

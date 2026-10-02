@@ -4,11 +4,29 @@ Send any file to your own endpoints from the Finder context menu (**Send to ▸*
 
 Endpoint types:
 
-- **Dinero**: uploads receipts to your organization's Bilag inbox (PDFs and images, max 6 MB).
+- **Dinero**: uploads receipts to your organization's Bilag inbox (PDFs and images; images are shrunk to fit the 6 MB limit).
 - **Email**: opens a prefilled draft, or sends directly over SMTP.
-- **HTTP**: any URL, as multipart, raw bytes or a JSON/base64 template. Secret headers are stored in the Keychain.
+- **HTTP**: any URL, as multipart, raw bytes or a JSON/base64 template, with a Keychain-stored `{secret}` and optional Basic auth.
+- **Folder** (macOS): copies or moves files into a folder.
 
-Subjects, bodies, URLs, headers and form fields support placeholders: `{filename}` `{basename}` `{ext}` `{mime}` `{size}` `{date}` `{time}` `{datetime}` `{count}` `{endpoint}`.
+**Templates.** "Add Endpoint" offers ready-made setups:
+
+- Accounting: Dinero (API or email), e-conomic, Billy, Expensify
+- Documents and storage: a folder, Paperless-ngx, Nextcloud / WebDAV
+- Messaging: Discord, Telegram, ntfy
+- Automation: n8n / Zapier / Make webhooks
+- Custom: plain HTTP and email
+
+Any endpoint can be exported to a JSON file and imported on another machine. Secrets are never included.
+
+**Per endpoint** you can also set:
+
+- **File types**: only offer the endpoint for, say, `pdf, jpg`.
+- **Before sending**: convert images to JPEG or PDF, shrink images above a size, and rename with a template. Originals are never changed.
+- **After sending** (macOS): add a Finder tag such as "Sent to Dinero" and/or move the original to an archive folder.
+- **Send Test File**: sends a one-page PDF through the endpoint to check the setup.
+
+Subjects, bodies, URLs, headers, form fields and rename templates support placeholders: `{filename}` `{basename}` `{ext}` `{mime}` `{size}` `{date}` `{time}` `{datetime}` `{count}` `{endpoint}`.
 
 Endpoints sync between devices through iCloud, and passwords and tokens through iCloud Keychain.
 
