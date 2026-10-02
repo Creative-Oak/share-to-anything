@@ -50,7 +50,7 @@ and kept in a short history. HTTP non-2xx responses include the first 300 chars 
 
 `swift test` in `Packages/SendKit`: template expansion, MIME and multipart encoding, SMTP reply parsing, endpoint coding round-trips.
 
-## Added after 1.0: templates and workflow
+## Added in 1.1: templates and workflow
 
 - **Presets** (`Presets.swift`) are plain `Endpoint` values offered in the Add Endpoint gallery. Most are configurations of the HTTP and email senders, so adding a service rarely needs new sending code.
 - **Import and export**: an endpoint is exported as JSON. On import it gets fresh identifiers, so it never shares Keychain items with the original. Secrets are not part of the model.
